@@ -1,18 +1,17 @@
 [
     {
         "type": "video",
-        "url": "https://youtu.be/Aaj2kuw47A0",
+        "url": "https://www.youtube.com/watch?v=oYBjKP48aR4",
         "loop": true
+    },
+    {
+        "type": "video",
+        "url": "https://etakouana35-del.github.io/pubV/video2.mp4",
+        "loop": false
     },
     {
         "type": "link",
         "url": "https://tonsite.com/formation",
         "text": "Découvrez notre formation !"
-    },
-    {
-        "type": "video",
-        "url": "https://tonsite.com/video2.mp4",
-        "loop": false
     }
 ]
-
