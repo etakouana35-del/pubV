@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         justifyContent: "center",
         maxWidth: "90%",
         maxHeight: "80%",
-        overflowY: "auto",
+        overflow: "hidden",
         transition: "opacity 0.5s ease",
         bottom: "10px",
         right: "10px",
@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     closeBtn.addEventListener("click", () => container.remove());
     container.appendChild(closeBtn);
 
+    // Responsive
     function adjustForScreen() {
         if(window.innerWidth <= 768){
             Object.assign(container.style, {
@@ -77,12 +78,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
             function showAd(index) {
                 const ad = data[index];
-
                 container.style.opacity = "0";
 
                 setTimeout(() => {
+                    // Vider le conteneur sauf bouton
                     container.querySelectorAll(":not(button)").forEach(el => el.remove());
 
+                    // Texte indicatif
+                    const infoText = document.createElement("div");
+                    infoText.textContent = "Ne ratez pas notre pub !";
+                    Object.assign(infoText.style, {
+                        color: "#fff",
+                        fontWeight: "bold",
+                        marginBottom: "5px",
+                        fontSize: "14px",
+                        textAlign: "center"
+                    });
+                    container.appendChild(infoText);
+
+                    // Afficher le contenu automatiquement
                     if(ad.type === "video"){
                         if(ad.url.includes("youtube.com") || ad.url.includes("youtu.be")){
                             const videoId = getYouTubeID(ad.url);
@@ -107,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             container.appendChild(video);
                         }
                     } else if(ad.type === "link"){
-                        // Charger le lien automatiquement dans un iframe
+                        // Affichage automatique dans un iframe
                         const iframe = document.createElement("iframe");
                         iframe.src = ad.url;
                         Object.assign(iframe.style, {
