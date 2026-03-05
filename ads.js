@@ -1,70 +1,260 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const displayDuration = 7000; // durée du conteneur visible
-    const adsStorageKey = "ads_shown"; // clé pour stocker pubs déjà vues
 
-    // récupérer pubs déjà affichées depuis localStorage
-    const shownAds = JSON.parse(localStorage.getItem(adsStorageKey)) || [];
+let adsData = [];
+let currentIndex = 0;
 
-    fetch("https://etakouana35-del.github.io/pubV/pub.json")
-        .then(res => res.json())
-        .then(data => {
-            // filtrer les pubs déjà vues
-            const remainingAds = data.filter(ad => !shownAds.includes(ad.url));
+const rotationTime = 15000;
+const autoOpenTime = 20000;
 
-            if (remainingAds.length === 0) return; // toutes pubs déjà vues
+/* CONTENEUR */
 
-            // choisir une pub à afficher (tu peux randomiser ici si tu veux)
-            const ad = remainingAds[0];
+const container = document.createElement("div");
 
-            // créer conteneur sur le site
-            const container = document.createElement("div");
-            Object.assign(container.style, {
-                position: "fixed",
-                top: "10px",
-                right: "10px",
-                width: "320px",
-                height: "180px",
-                background: "rgba(0,0,0,0.85)",
-                color: "#fff",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                fontSize: "16px",
-                borderRadius: "10px",
-                zIndex: "9999",
-                textAlign: "center",
-                padding: "10px"
-            });
-
-            // si c'est une vidéo
-            if (ad.type === "video") {
-                const video = document.createElement("video");
-                video.src = ad.url;
-                video.width = 300;
-                video.height = 150;
-                video.autoplay = true;
-                video.muted = true;
-                video.controls = false;
-                container.appendChild(video);
-            } else {
-                // sinon lien
-                const link = document.createElement("a");
-                link.href = ad.url;
-                link.textContent = "Cliquez ici pour voir la publicité";
-                link.target = "_blank";
-                link.style.color = "#00f";
-                container.appendChild(link);
-            }
-
-            document.body.appendChild(container);
-
-            // supprimer après displayDuration
-            setTimeout(() => container.remove(), displayDuration);
-
-            // marquer pub comme vue
-            shownAds.push(ad.url);
-            localStorage.setItem(adsStorageKey, JSON.stringify(shownAds));
-        })
-        .catch(err => console.log("Erreur pub", err));
+Object.assign(container.style,{
+position:"fixed",
+top:"50%",
+left:"50%",
+transform:"translate(-50%,-50%)",
+background:"rgba(0,0,0,0.9)",
+borderRadius:"12px",
+overflow:"hidden",
+zIndex:"9999",
+boxShadow:"0 0 30px rgba(0,0,0,0.9)",
+transition:"all 0.8s ease"
 });
+
+/* TAILLE RESPONSIVE */
+
+function resizeAd(){
+
+if(window.innerWidth < 768){
+
+container.style.width="90%";
+container.style.height="70%";
+
+}else{
+
+container.style.width="420px";
+container.style.height="300px";
+
+}
+
+}
+
+resizeAd();
+window.addEventListener("resize", resizeAd);
+
+document.body.appendChild(container);
+
+/* TITRE */
+
+const title = document.createElement("div");
+
+title.textContent="CLIQUER SUR LA PUBLICITÉ";
+
+Object.assign(title.style,{
+color:"#fff",
+background:"#e60000",
+textAlign:"center",
+fontWeight:"bold",
+padding:"10px",
+fontSize:"18px",
+letterSpacing:"1px"
+});
+
+container.appendChild(title);
+
+/* BOUTON FERMER */
+
+const closeBtn=document.createElement("div");
+
+closeBtn.innerHTML="✕";
+
+Object.assign(closeBtn.style,{
+position:"absolute",
+top:"6px",
+right:"10px",
+color:"#fff",
+cursor:"pointer",
+fontSize:"20px"
+});
+
+closeBtn.onclick=()=>container.remove();
+
+container.appendChild(closeBtn);
+
+/* ZONE PUB */
+
+const adArea=document.createElement("div");
+
+Object.assign(adArea.style,{
+width:"100%",
+height:"calc(100% - 45px)"
+});
+
+container.appendChild(adArea);
+
+/* DEPLACEMENT APRES 5s */
+
+setTimeout(()=>{
+
+Object.assign(container.style,{
+top:"auto",
+left:"auto",
+transform:"none",
+bottom:"20px",
+right:"20px"
+});
+
+resizeAd();
+
+},5000);
+
+/* YOUTUBE ID */
+
+function getYoutubeId(url){
+
+let regExp=/^(?:.*v=|youtu\.be\/)([^&]+)/;
+
+let match=url.match(regExp);
+
+return match?match[1]:null;
+
+}
+
+/* AFFICHAGE PUB */
+
+function showAd(){
+
+if(adsData.length===0) return;
+
+const ad=adsData[currentIndex];
+
+adArea.innerHTML="";
+
+/* VIDEO */
+
+if(ad.type==="video"){
+
+if(ad.url.includes("youtube")){
+
+const id=getYoutubeId(ad.url);
+
+const iframe=document.createElement("iframe");
+
+iframe.src=`https://www.youtube.com/embed/${id}?autoplay=1&mute=1`;
+
+Object.assign(iframe.style,{
+width:"100%",
+height:"100%",
+border:"none"
+});
+
+adArea.appendChild(iframe);
+
+}else{
+
+const video=document.createElement("video");
+
+video.src=ad.url;
+
+video.autoplay=true;
+video.muted=true;
+video.loop=true;
+video.controls=true;
+
+Object.assign(video.style,{
+width:"100%",
+height:"100%"
+});
+
+adArea.appendChild(video);
+
+}
+
+}
+
+/* LIEN */
+
+if(ad.type==="link"){
+
+const wrapper=document.createElement("div");
+
+Object.assign(wrapper.style,{
+position:"relative",
+width:"100%",
+height:"100%"
+});
+
+const iframe=document.createElement("iframe");
+
+iframe.src=ad.url;
+
+Object.assign(iframe.style,{
+width:"100%",
+height:"100%",
+border:"none"
+});
+
+const overlay=document.createElement("div");
+
+Object.assign(overlay.style,{
+position:"absolute",
+top:"0",
+left:"0",
+width:"100%",
+height:"100%",
+cursor:"pointer"
+});
+
+overlay.onclick=()=>window.open(ad.url,"_blank");
+
+wrapper.appendChild(iframe);
+wrapper.appendChild(overlay);
+
+adArea.appendChild(wrapper);
+
+/* OUVERTURE AUTO */
+
+setTimeout(()=>{
+
+window.open(ad.url,"_blank");
+
+},autoOpenTime);
+
+}
+
+/* ROTATION */
+
+currentIndex++;
+
+if(currentIndex>=adsData.length){
+currentIndex=0;
+}
+
+setTimeout(showAd,rotationTime);
+
+}
+
+/* CHARGEMENT PUB */
+
+fetch("https://etakouana35-del.github.io/pubV/pub.json")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+adsData=data;
+
+showAd();
+
+})
+
+.catch(err=>{
+
+console.log("Erreur pub",err);
+
+});
+
+});
+
