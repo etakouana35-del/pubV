@@ -78,14 +78,11 @@ document.addEventListener("DOMContentLoaded", () => {
             function showAd(index) {
                 const ad = data[index];
 
-                // Fade out container
                 container.style.opacity = "0";
 
                 setTimeout(() => {
-                    // Supprimer toutes les pubs existantes (sauf le bouton)
                     container.querySelectorAll(":not(button)").forEach(el => el.remove());
 
-                    // Ajouter la pub
                     if(ad.type === "video"){
                         if(ad.url.includes("youtube.com") || ad.url.includes("youtu.be")){
                             const videoId = getYouTubeID(ad.url);
@@ -110,35 +107,25 @@ document.addEventListener("DOMContentLoaded", () => {
                             container.appendChild(video);
                         }
                     } else if(ad.type === "link"){
-                        const link = document.createElement("a");
-                        link.href = ad.url;
-                        link.textContent = ad.text || "Cliquez ici !";
-                        link.target = "_blank";
-                        Object.assign(link.style, {
-                            display: "inline-block",
-                            padding: "8px 12px",
-                            backgroundColor: "#007BFF",
-                            color: "#fff",
-                            borderRadius: "5px",
-                            textAlign: "center",
-                            textDecoration: "none",
-                            fontWeight: "bold",
-                            marginTop: "5px"
+                        // Charger le lien automatiquement dans un iframe
+                        const iframe = document.createElement("iframe");
+                        iframe.src = ad.url;
+                        Object.assign(iframe.style, {
+                            width: "100%",
+                            height: "200px",
+                            border: "none",
+                            borderRadius: "10px"
                         });
-                        container.appendChild(link);
+                        container.appendChild(iframe);
                     }
 
-                    // Fade in container
                     container.style.opacity = "1";
-
-                    // Passer à la pub suivante
                     currentIndex = (currentIndex + 1) % data.length;
                     setTimeout(() => showAd(currentIndex), rotationTime);
 
-                }, 500); // transition fade
+                }, 500);
             }
 
-            // Lancer la première pub
             showAd(currentIndex);
         })
         .catch(err => {
