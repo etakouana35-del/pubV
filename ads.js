@@ -9,38 +9,19 @@ container.id = "ads-container";
 
 Object.assign(container.style,{
 position:"fixed",
-bottom:"20px",
-right:"20px",
-width:"420px",
-height:"300px",
+bottom:"10px",
+right:"10px",
+width:"320px",
+height:"220px",
 background:"rgba(0,0,0,0.9)",
 borderRadius:"10px",
 overflow:"hidden",
 zIndex:"9999",
-boxShadow:"0 0 20px rgba(0,0,0,0.8)",
+boxShadow:"0 0 15px rgba(0,0,0,0.7)",
 transition:"opacity 0.5s"
 });
 
 document.body.appendChild(container);
-
-/* -------- TITRE PUBLICITE -------- */
-
-const title = document.createElement("div");
-title.textContent = "CLIQUER SUR LA PUBLICITÉ";
-
-Object.assign(title.style,{
-color:"#fff",
-fontWeight:"bold",
-textAlign:"center",
-padding:"8px",
-fontSize:"18px",
-background:"#e60000",
-letterSpacing:"1px"
-});
-
-container.appendChild(title);
-
-/* -------- BOUTON FERMER -------- */
 
 const closeBtn = document.createElement("div");
 closeBtn.innerHTML="✕";
@@ -59,18 +40,11 @@ closeBtn.onclick=()=>container.remove();
 
 container.appendChild(closeBtn);
 
-/* -------- ZONE PUB -------- */
-
 const adArea = document.createElement("div");
-
-Object.assign(adArea.style,{
-width:"100%",
-height:"calc(100% - 40px)"
-});
-
+adArea.style.width="100%";
+adArea.style.height="100%";
 container.appendChild(adArea);
 
-/* -------- EXTRACTION ID YOUTUBE -------- */
 
 function getYoutubeId(url){
 let regExp=/^(?:.*v=|youtu\.be\/)([^&]+)/;
@@ -78,7 +52,6 @@ let match=url.match(regExp);
 return match?match[1]:null;
 }
 
-/* -------- AFFICHAGE PUB -------- */
 
 function showAd(){
 
@@ -87,8 +60,6 @@ if(adsData.length===0) return;
 const ad = adsData[currentIndex];
 
 adArea.innerHTML="";
-
-/* -------- VIDEO -------- */
 
 if(ad.type==="video"){
 
@@ -131,8 +102,6 @@ adArea.appendChild(video);
 
 }
 
-/* -------- LIEN PLATEFORME -------- */
-
 if(ad.type==="link"){
 
 const wrapper=document.createElement("div");
@@ -173,8 +142,6 @@ adArea.appendChild(wrapper);
 
 }
 
-/* -------- ROTATION PUB -------- */
-
 currentIndex++;
 
 if(currentIndex>=adsData.length){
@@ -185,7 +152,6 @@ setTimeout(showAd,rotationTime);
 
 }
 
-/* -------- CHARGEMENT PUB.JSON -------- */
 
 fetch("https://etakouana35-del.github.io/pubV/pub.json")
 .then(res=>res.json())
