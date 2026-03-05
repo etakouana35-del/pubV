@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Ets GOOD DAV NET - Admin GitHub</title>
+<style>
+body{background:black;color:white;font-family:Arial;text-align:center;padding:50px;}
+input{width:70%;padding:12px;margin:10px;border-radius:5px;border:none;}
+select{padding:10px;margin:10px;border-radius:5px;}
+button{padding:12px 25px;background:cyan;border:none;cursor:pointer;font-size:16px;}
+textarea{width:90%;height:100px;margin-top:20px;}
+</style>
+</head>
+<body>
+
+<h1>Ets GOOD DAV NET</h1>
+<h3>Publier une publicité vidéo</h3>
+
+<input type="text" id="video" placeholder="Lien vidéo (.mp4 ou YouTube)">
+<br>
+<select id="type">
+  <option value="mp4">Fichier MP4</option>
+  <option value="youtube">YouTube</option>
+</select>
+<br>
+<button onclick="publier()">Publier la publicité</button>
+
+<h3>Script à installer sur tes sites</h3>
+<textarea id="script" readonly>
+<script src="https://TON_GITHUB_USERNAME.github.io/GOODDAVNET-ADS-GH/ads.js"></script>
+</textarea>
+
+<script>
+function publier(){
+    let video = document.getElementById("video").value.trim();
+    let type = document.getElementById("type").value;
+
+    if(!video){alert("Entrez le lien de la vidéo !"); return;}
+
+    let pub = { video: video, type: type };
+    
+    // Télécharger pub.json pour remplacer sur GitHub
+    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(pub));
+    let dlAnchorElem = document.createElement('a');
+    dlAnchorElem.setAttribute("href", dataStr);
+    dlAnchorElem.setAttribute("download", "pub.json");
+    dlAnchorElem.click();
+    
+    alert("Télécharge pub.json et remplace-le sur GitHub Pages");
+}
+</script>
+
+</body>
+</html>

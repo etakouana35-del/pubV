@@ -1,0 +1,4 @@
+{
+  "video": "https://youtu.be/oYBjKP48aR4",  // ou un fichier .mp4 direct
+  "type": "youtube"                          // "youtube" ou "mp4"
+}
