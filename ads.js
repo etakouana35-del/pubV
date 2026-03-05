@@ -72,24 +72,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            let history = [];
-            const rotationTime = 15000; // 15s
-            function showRandomAd() {
-                // Choisir une pub non répétée récemment
-                let remainingAds = data.filter((_, i) => !history.includes(i));
-                if(remainingAds.length === 0) history = [], remainingAds = data; // reset si toutes vues
+            let currentIndex = 0;
+            const rotationTime = 15000; // 15 secondes par pub
 
-                const adIndex = data.indexOf(remainingAds[Math.floor(Math.random() * remainingAds.length)]);
-                const ad = data[adIndex];
-
-                // Historique
-                history.push(adIndex);
-                if(history.length > data.length / 2) history.shift(); // garder moitié max
+            function showAd(index) {
+                const ad = data[index];
 
                 // Fade out container
                 container.style.opacity = "0";
+
                 setTimeout(() => {
-                    // Vider le contenu sauf le bouton
+                    // Supprimer toutes les pubs existantes (sauf le bouton)
                     container.querySelectorAll(":not(button)").forEach(el => el.remove());
 
                     // Ajouter la pub
@@ -138,20 +131,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Fade in container
                     container.style.opacity = "1";
 
-                }, 500);
+                    // Passer à la pub suivante
+                    currentIndex = (currentIndex + 1) % data.length;
+                    setTimeout(() => showAd(currentIndex), rotationTime);
+
+                }, 500); // transition fade
             }
 
-            // Première pub
-            showRandomAd();
-
-            // Rotation automatique
-            const interval = setInterval(showRandomAd, rotationTime);
-
-            // Fermeture automatique après X ms
-            setTimeout(() => {
-                clearInterval(interval);
-                container.remove();
-            }, rotationTime * 5); // 5 pubs maximum avant disparition
+            // Lancer la première pub
+            showAd(currentIndex);
         })
         .catch(err => {
             console.error("Erreur chargement pub : ", err);
