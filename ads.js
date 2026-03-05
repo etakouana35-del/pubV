@@ -5,10 +5,15 @@ let currentIndex = 0;
 
 const rotationTime = 15000;
 const autoOpenTime = 20000;
+const reopenTime = 10000;
 
-/* CONTENEUR */
+let container;
 
-const container = document.createElement("div");
+/* CREATION PUB */
+
+function createAdContainer(){
+
+container = document.createElement("div");
 
 Object.assign(container.style,{
 position:"fixed",
@@ -23,7 +28,7 @@ boxShadow:"0 0 30px rgba(0,0,0,0.9)",
 transition:"all 0.8s ease"
 });
 
-/* TAILLE RESPONSIVE */
+/* RESPONSIVE */
 
 function resizeAd(){
 
@@ -48,7 +53,7 @@ document.body.appendChild(container);
 
 /* TITRE */
 
-const title = document.createElement("div");
+const title=document.createElement("div");
 
 title.textContent="CLIQUER SUR LA PUBLICITÉ";
 
@@ -58,8 +63,7 @@ background:"#e60000",
 textAlign:"center",
 fontWeight:"bold",
 padding:"10px",
-fontSize:"18px",
-letterSpacing:"1px"
+fontSize:"18px"
 });
 
 container.appendChild(title);
@@ -79,7 +83,18 @@ cursor:"pointer",
 fontSize:"20px"
 });
 
-closeBtn.onclick=()=>container.remove();
+closeBtn.onclick=()=>{
+
+container.remove();
+
+setTimeout(()=>{
+
+createAdContainer();
+showAd();
+
+},reopenTime);
+
+};
 
 container.appendChild(closeBtn);
 
@@ -110,6 +125,10 @@ resizeAd();
 
 },5000);
 
+return adArea;
+
+}
+
 /* YOUTUBE ID */
 
 function getYoutubeId(url){
@@ -129,6 +148,8 @@ function showAd(){
 if(adsData.length===0) return;
 
 const ad=adsData[currentIndex];
+
+const adArea = container.querySelector("div:last-child");
 
 adArea.innerHTML="";
 
@@ -157,7 +178,6 @@ adArea.appendChild(iframe);
 const video=document.createElement("video");
 
 video.src=ad.url;
-
 video.autoplay=true;
 video.muted=true;
 video.loop=true;
@@ -245,6 +265,8 @@ fetch("https://etakouana35-del.github.io/pubV/pub.json")
 .then(data=>{
 
 adsData=data;
+
+createAdContainer();
 
 showAd();
 
