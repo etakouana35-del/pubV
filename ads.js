@@ -18,7 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
         transition: "opacity 0.5s ease",
         bottom: "10px",
         right: "10px",
-        opacity: "1"
+        opacity: "1",
+        cursor: "default"
     });
     document.body.appendChild(container);
 
@@ -81,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 container.style.opacity = "0";
 
                 setTimeout(() => {
-                    // Vider le conteneur sauf bouton
                     container.querySelectorAll(":not(button)").forEach(el => el.remove());
 
                     // Texte indicatif
@@ -96,7 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                     container.appendChild(infoText);
 
-                    // Afficher le contenu automatiquement
                     if(ad.type === "video"){
                         if(ad.url.includes("youtube.com") || ad.url.includes("youtu.be")){
                             const videoId = getYouTubeID(ad.url);
@@ -121,14 +120,18 @@ document.addEventListener("DOMContentLoaded", () => {
                             container.appendChild(video);
                         }
                     } else if(ad.type === "link"){
-                        // Affichage automatique dans un iframe
                         const iframe = document.createElement("iframe");
                         iframe.src = ad.url;
                         Object.assign(iframe.style, {
                             width: "100%",
                             height: "200px",
                             border: "none",
-                            borderRadius: "10px"
+                            borderRadius: "10px",
+                            cursor: "pointer"
+                        });
+                        // Si l'utilisateur clique sur l'iframe, ouvrir le site dans un nouvel onglet
+                        iframe.addEventListener("click", () => {
+                            window.open(ad.url, "_blank");
                         });
                         container.appendChild(iframe);
                     }
