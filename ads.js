@@ -1,38 +1,81 @@
-fetch("https://TON_GITHUB_USERNAME.github.io/GOODDAVNET-ADS-GH/pub.json")
-.then(res => res.json())
-.then(data => {
-    if(!data.video) return;
+// ads.js universel amélioré
 
-    let popup = document.createElement("div");
-    popup.style.position="fixed";
-    popup.style.top="0";
-    popup.style.left="0";
-    popup.style.width="100%";
-    popup.style.height="100%";
-    popup.style.background="rgba(0,0,0,0.8)";
-    popup.style.display="flex";
-    popup.style.alignItems="center";
-    popup.style.justifyContent="center";
-    popup.style.zIndex="9999";
+(function() {
+    const PUB_JSON_URL = "https://etakouana35-del.github.io/pubV/pub.json"; // URL de ton pub.json
+    const CHANGE_INTERVAL = 30000; // 30 secondes
 
-    let content = `<div style="background:white;padding:20px;text-align:center;border-radius:10px;">
-    <h3>Publicité Ets GOOD DAV NET</h3>`;
+    let currentIndex = 0;
+    let adsData = [];
 
-    if(data.type === "mp4"){
-        content += `<video width="420" autoplay muted controls>
-        <source src="${data.video}" type="video/mp4">
-        </video>`;
-    } else if(data.type === "youtube"){
-        // transformer lien YouTube en embed
-        let videoID = data.video.split("v=")[1] || data.video.split(".be/")[1];
-        if(videoID.includes("&")) videoID = videoID.split("&")[0];
-        content += `<iframe width="420" height="236" src="https://www.youtube.com/embed/${videoID}?autoplay=1&mute=1"
-        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    // Crée le conteneur pub
+    function createAdContainer() {
+        let container = document.getElementById("ads-container");
+        if (!container) {
+            container = document.createElement("div");
+            container.id = "ads-container";
+            container.style.position = "fixed";
+            container.style.bottom = "0";
+            container.style.left = "0";
+            container.style.width = "100%";
+            container.style.backgroundColor = "#000000aa";
+            container.style.display = "flex";
+            container.style.justifyContent = "center";
+            container.style.alignItems = "center";
+            container.style.padding = "10px";
+            container.style.zIndex = "9999";
+            document.body.appendChild(container);
+        }
+        return container;
     }
 
-    content += `<br><br><button onclick="this.parentElement.parentElement.remove()"
-    style="background:red;color:white;border:none;padding:5px 10px;cursor:pointer;">Fermer</button></div>`;
+    // Affiche une pub
+    function displayAd(adData) {
+        const container = createAdContainer();
+        container.innerHTML = ""; // vide le container avant d'ajouter la pub
 
-    popup.innerHTML = content;
-    document.body.appendChild(popup);
-});
+        if(adData.type === "video") {
+            const video = document.createElement("video");
+            video.src = adData.url;
+            video.controls = true;
+            video.autoplay = true;
+            video.loop = adData.loop || false;
+            video.style.maxHeight = "150px";
+            video.style.width = "auto";
+            container.appendChild(video);
+        } else if(adData.type === "link") {
+            const link = document.createElement("a");
+            link.href = adData.url;
+            link.textContent = adData.text || "Cliquez ici pour voir la pub";
+            link.target = "_blank";
+            link.style.color = "#fff";
+            link.style.fontSize = "16px";
+            container.appendChild(link);
+        }
+    }
+
+    // Change de pub toutes les X secondes
+    function startRotation() {
+        if(adsData.length === 0) return;
+
+        displayAd(adsData[currentIndex]);
+        currentIndex = (currentIndex + 1) % adsData.length;
+
+        setInterval(() => {
+            displayAd(adsData[currentIndex]);
+            currentIndex = (currentIndex + 1) % adsData.length;
+        }, CHANGE_INTERVAL);
+    }
+
+    // Charger pub.json
+    fetch(PUB_JSON_URL)
+        .then(response => response.json())
+        .then(data => {
+            if(Array.isArray(data) && data.length > 0) {
+                adsData = data;
+                startRotation();
+            } else {
+                console.warn("Aucune pub trouvée dans pub.json");
+            }
+        })
+        .catch(err => console.error("Erreur chargement pub.json :", err));
+})();
