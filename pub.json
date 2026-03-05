@@ -1,18 +1,27 @@
 [
-    {
-        "type": "video",
-        "url": "https://www.youtube.com/watch?v=oYBjKP48aR4",
-        "loop": true
-    },
-    {
-        "type": "video",
-        "url": "https:https://etakouana35-del.github.io/l/",
-        "loop": false
-    },
-    {
-        "type": "link",
-        "url": "https://etakouana35-del.github.io/l/",
-        "text": "Découvrez notre formation !"
-    }
+  {
+    "type": "link",
+    "url": "https://etakouana35-del.github.io/l/",
+    "text": "Découvrez notre première pub !"
+  },
+  {
+    "type": "link",
+    "url": "https://etakouana35-del.github.io/com/",
+    "text": "Cliquez ici pour voir la deuxième pub !"
+  },
+  {
+    "type": "link",
+    "url": "https://etsgooddavnet-dot.github.io/r/",
+    "text": "Ne ratez pas notre troisième pub !"
+  },
+  {
+    "type": "video",
+    "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "loop": true
+  },
+  {
+    "type": "video",
+    "url": "https://etakouana35-del.github.io/pubV/sample-video.mp4",
+    "loop": true
+  }
 ]
-
