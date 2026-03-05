@@ -1,4 +1,17 @@
-{
-  "video": "https://youtu.be/oYBjKP48aR4?list=TLGGOB86ImZDzGswNTAzMjAyNg",
-  "type": "youtube"
-}
+[
+    {
+        "type": "video",
+        "url": "https://tonsite.com/video1.mp4",
+        "loop": true
+    },
+    {
+        "type": "link",
+        "url": "https://tonsite.com/formation",
+        "text": "Découvrez notre formation !"
+    },
+    {
+        "type": "video",
+        "url": "https://tonsite.com/video2.mp4",
+        "loop": false
+    }
+]
