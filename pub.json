@@ -1,29 +1,29 @@
 [
   {
     "type": "link",
-    "url": "https://etakouana35-del.github.io/l/",
-    "text": "Découvrez notre première pub !"
+    "url": "https://etakouana35-del.github.io/l/"
   },
   {
     "type": "link",
-    "url": "https://etakouana35-del.github.io/com/",
-    "text": "Cliquez ici pour voir la deuxième pub !"
+    "url": "https://etakouana35-del.github.io/com/"
   },
   {
     "type": "link",
-    "url": "https://etsgooddavnet-dot.github.io/r/",
-    "text": "Ne ratez pas notre troisième pub !"
+    "url": "https://etsgooddavnet-dot.github.io/r/"
   },
   {
     "type": "video",
-    "url": "https://youtu.be/oYBjKP48aR4?list=TLGGOB86ImZDzGswNTAzMjAyNg",
+    "url": "https://www.w3schools.com/html/mov_bbb.mp4",
     "loop": true
   },
   {
     "type": "video",
-    "url": "https://youtu.be/oYBjKP48aR4?list=TLGGOB86ImZDzGswNTAzMjAyN",
+    "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "loop": false
+  },
+  {
+    "type": "video",
+    "url": "https://www.w3schools.com/html/movie.mp4",
     "loop": true
   }
 ]
-
-
