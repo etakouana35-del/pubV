@@ -6,18 +6,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const displayDuration = 7000; // durée du conteneur visible (ms)
 
     function showNextAd() {
-        if (currentIndex >= adsData.length) return; // toutes les pubs affichées
+        // STOP si toutes les pubs ont été affichées
+        if (currentIndex >= adsData.length) return;
 
         const ad = adsData[currentIndex];
 
-        // vérifier si la pub a déjà été ouverte
         if (!ad.opened) {
             // ouvrir la pub dans un nouvel onglet
             if (ad.type === "video" || ad.type === "link") {
                 window.open(ad.url, "_blank");
             }
 
-            // créer un petit conteneur visible temporairement
+            // conteneur temporaire sur le site
             const container = document.createElement("div");
             Object.assign(container.style, {
                 position: "fixed",
@@ -39,27 +39,26 @@ document.addEventListener("DOMContentLoaded", () => {
             container.textContent = "Publicité ouverte dans un nouvel onglet";
             document.body.appendChild(container);
 
-            // supprimer le conteneur après displayDuration
-            setTimeout(() => {
-                container.remove();
-            }, displayDuration);
+            setTimeout(() => container.remove(), displayDuration);
 
-            ad.opened = true; // marquer la pub comme ouverte
+            ad.opened = true;
         }
 
         currentIndex++;
-        // passer à la prochaine pub
-        setTimeout(showNextAd, autoOpenTime + 500);
+
+        // seulement si une pub suivante existe
+        if (currentIndex < adsData.length) {
+            setTimeout(showNextAd, autoOpenTime + 500);
+        }
     }
 
     // charger les pubs depuis le JSON
     fetch("https://etakouana35-del.github.io/pubV/pub.json")
         .then(res => res.json())
         .then(data => {
-            adsData = data.map(ad => ({ ...ad, opened: false })); // ajouter le flag opened
-            if (adsData.length > 0) {
-                showNextAd();
-            }
+            // ajouter le flag opened à chaque pub
+            adsData = data.map(ad => ({ ...ad, opened: false }));
+            if (adsData.length > 0) showNextAd();
         })
         .catch(err => console.log("Erreur pub", err));
 });
