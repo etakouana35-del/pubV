@@ -1,29 +1,9 @@
 [
-  {
-    "type": "link",
-    "url": "https://etakouana35-del.github.io/l/"
-  },
-  {
-    "type": "link",
-    "url": "https://etakouana35-del.github.io/com/"
-  },
-  {
-    "type": "link",
-    "url": "https://etsgooddavnet-dot.github.io/r/"
-  },
-  {
-    "type": "video",
-    "url": "https://www.w3schools.com/html/mov_bbb.mp4",
-    "loop": true
-  },
-  {
-    "type": "video",
-    "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    "loop": false
-  },
-  {
-    "type": "video",
-    "url": "https://www.w3schools.com/html/movie.mp4",
-    "loop": true
-  }
+ { "type":"link", "url":"https://etakouana35-del.github.io/l/" },
+ { "type":"link", "url":"https://etakouana35-del.github.io/com/" },
+ { "type":"link", "url":"https://etsgooddavnet-dot.github.io/r/" },
+
+ { "type":"video", "url":"https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
+
+ { "type":"video", "url":"https://www.w3schools.com/html/mov_bbb.mp4", "loop":true }
 ]
