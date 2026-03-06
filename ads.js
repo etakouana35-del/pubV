@@ -1,33 +1,39 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const openedAds = new Set(); // pubs déjà ouvertes
+    const STORAGE_KEY = "openedAdsList";
     let adsData = [];
+    let openedAds = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const DELAY_BETWEEN = 2000; // 2 secondes entre chaque pub
 
     // Charger les pubs depuis le JSON
     fetch("https://etakouana35-del.github.io/pubV/pub.json")
         .then(res => res.json())
         .then(data => {
+            if (!Array.isArray(data) || data.length === 0) return;
             adsData = data;
-            // Attente du premier clic utilisateur pour ouvrir les pubs
-            waitForUserClick();
+            openAdsSequentially(0);
         })
-        .catch(err => console.log("Erreur pub", err));
+        .catch(err => console.log("Erreur pub :", err));
 
-    function waitForUserClick() {
-        function handleClick() {
-            openAdsOnce();       // ouvre chaque pub une seule fois
-            document.removeEventListener("click", handleClick); // plus jamais
-        }
-        document.addEventListener("click", handleClick, { once: true });
-    }
+    function openAdsSequentially(index) {
+        // fin si toutes les pubs ont été traitées
+        if (index >= adsData.length) return;
 
-    function openAdsOnce() {
-        adsData.forEach((ad, index) => {
-            if (!openedAds.has(index)) {
-                openedAds.add(index);
-                window.open(ad.url, "_blank"); // ouvre dans un nouvel onglet
+        // ignorer les pubs déjà ouvertes
+        if (!openedAds.includes(index)) {
+            openedAds.push(index);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(openedAds));
+
+            // ouvrir la pub dans un nouvel onglet
+            if (adsData[index].url) {
+                window.open(adsData[index].url, "_blank");
             }
-        });
+        }
+
+        // passer à la pub suivante après un délai
+        setTimeout(() => {
+            openAdsSequentially(index + 1);
+        }, DELAY_BETWEEN);
     }
 
 });
