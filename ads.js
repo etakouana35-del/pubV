@@ -18,11 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function openAdsSequentially(index) {
         if (index >= adsData.length) return;
 
-        if (!openedAds.includes(index) && adsData[index].url) {
+        const ad = adsData[index];
+
+        // Si la pub n'a pas encore été ouverte
+        if (!openedAds.includes(index) && ad.url) {
             openedAds.push(index);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(openedAds));
-
-            const ad = adsData[index];
 
             if (ad.type === "link") {
                 window.open(ad.url, "_blank");
@@ -31,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // passer à la pub suivante après 2 secondes
+        // Appel récursif pour la pub suivante après 2 secondes
         setTimeout(() => {
             openAdsSequentially(index + 1);
         }, DELAY_BETWEEN);
@@ -43,7 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let videoHTML = "";
 
-        // Si URL YouTube, on crée un embed autoplay
         if (ad.url.includes("youtube.com") || ad.url.includes("youtu.be")) {
             const videoId = extractYouTubeID(ad.url);
             if (videoId) {
@@ -55,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 videoHTML = `<p>URL YouTube invalide</p>`;
             }
         } else {
-            // Vidéo locale .mp4
             const loopAttr = ad.loop ? "loop" : "";
             videoHTML = `<video src="${ad.url}" autoplay ${loopAttr} controls style="width:100%;height:100%;"></video>`;
         }
